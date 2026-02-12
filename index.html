@@ -2,115 +2,167 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рамадан 2026 — Щёлково</title>
-    
-    <!-- PWA Configuration -->
-    <link rel="manifest" href="/ramadan-timetable-2026/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Рамадан 2026">
-    <link rel="apple-touch-icon" href="/ramadan-timetable-2026/icons/icon-192.png">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🌙 Рамадан 2026 — Щёлково</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Анимированное звездное небо -->
     <div class="stars"></div>
     <div class="twinkling"></div>
+    <div class="clouds"></div>
     
+    <!-- Падающие звезды -->
+    <div class="shooting-star"></div>
+    <div class="shooting-star2"></div>
+    <div class="shooting-star3"></div>
+    
+    <!-- Полумесяц -->
+    <div class="moon"></div>
+    <div class="moon-glow"></div>
+
     <div class="container">
-        <header>
-            <div class="header-content">
-                <h1 class="ramadan-title">🌙 Рамадан 2026</h1>
-                <p class="subtitle">1447 год хиджры</p>
-                <div class="location-badge">
+        <!-- Шапка с параллаксом -->
+        <header class="parallax">
+            <div class="header-content fade-in">
+                <h1 class="ramadan-title pulse">🌙 Рамадан 2026</h1>
+                <p class="subtitle glow-text">1447 год хиджры</p>
+                <div class="location-badge float">
                     <i class="fas fa-map-marker-alt"></i> Щёлково, Московская область
                 </div>
             </div>
         </header>
 
+        <!-- Живые часы и обратный отсчет -->
+        <div class="live-time-section slide-down">
+            <div class="live-time-card">
+                <i class="fas fa-clock"></i>
+                <span id="liveClock">00:00:00</span>
+            </div>
+            <div class="countdown-card" id="ramadanCountdown">
+                <i class="fas fa-moon"></i>
+                <span id="countdownText">До Рамадана: 6 дней</span>
+            </div>
+        </div>
+
+        <!-- Карточка сегодня с 3D эффектом -->
         <div class="today-highlight">
-            <div class="today-card">
+            <div class="today-card glass-card flip-in">
                 <div class="today-header">
-                    <span class="today-label">Сегодня</span>
-                    <span class="hijri-date" id="hijriDate"></span>
+                    <span class="today-label pulse">✨ Сегодня</span>
+                    <span class="hijri-date" id="hijriDate">1 Рамадана 1447</span>
                 </div>
                 <div class="today-main">
-                    <div class="day-number" id="currentDay"></div>
+                    <div class="day-number-wrapper">
+                        <div class="day-number" id="currentDay">1</div>
+                        <div class="day-number-glow"></div>
+                    </div>
                     <div class="day-info">
-                        <span class="gregorian-date" id="gregorianDate"></span>
-                        <span class="day-name" id="dayName"></span>
+                        <span class="gregorian-date" id="gregorianDate">18 февраля 2026, среда</span>
+                        <span class="day-name" id="dayName">1-й день Рамадана</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Время Сухур и Ифтар с анимацией пульсации -->
         <div class="prayer-times-main">
-            <div class="prayer-card suhoor-card">
-                <div class="prayer-icon">🌅</div>
+            <div class="prayer-card suhoor-card glow-card" id="suhoorCard">
+                <div class="prayer-icon floating">🌅</div>
                 <h3>Сухур</h3>
-                <div class="time-large" id="suhoorTime"></div>
+                <div class="time-large" id="suhoorTime">5:40</div>
                 <div class="time-label">окончание приёма пищи</div>
                 <div class="time-note">Фаджр</div>
+                <div class="reminder-badge" id="suhoorReminder"></div>
             </div>
-            <div class="prayer-card iftar-card">
-                <div class="prayer-icon">🌇</div>
+            <div class="prayer-card iftar-card glow-card" id="iftarCard">
+                <div class="prayer-icon floating-delay">🌇</div>
                 <h3>Ифтар</h3>
-                <div class="time-large" id="iftarTime"></div>
+                <div class="time-large" id="iftarTime">17:40</div>
                 <div class="time-label">время разговения</div>
                 <div class="time-note">Магриб</div>
+                <div class="reminder-badge pulse" id="iftarReminder"></div>
             </div>
         </div>
 
-        <div class="progress-section">
-            <h3><i class="fas fa-chart-line"></i> Прогресс Рамадана</h3>
+        <!-- Прогресс Рамадана с анимированным счетчиком -->
+        <div class="progress-section slide-up">
+            <h3><i class="fas fa-chart-line rotating"></i> Прогресс Рамадана</h3>
             <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 3.2%;"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span class="days-counter" id="daysPassed">1</span>/31 дней
+                        <span class="days-remaining" id="daysRemaining">(осталось 30)</span>
+                    </div>
                 </div>
-                <div class="progress-stats">
-                    <span id="daysPassed"></span>/30 дней
-                    <span class="days-remaining" id="daysRemaining"></span>
-                </div>
+                <div class="ramadan-phase" id="ramadanPhase">🌙 Начало Рамадана</div>
             </div>
         </div>
 
+        <!-- Дуа дня с красивым оформлением -->
         <div class="dua-section">
-            <h3><i class="fas fa-hands"></i> Дуа дня</h3>
-            <div class="dua-card">
-                <div class="dua-arabic" id="duaArabic"></div>
-                <div class="dua-translation" id="duaTranslation"></div>
+            <h3><i class="fas fa-hands"></i> Дуа сегодня</h3>
+            <div class="dua-card shimmer">
+                <div class="dua-arabic" id="duaArabic">
+                    اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي
+                </div>
+                <div class="dua-translation" id="duaTranslation">
+                    О Аллах, прошу Тебя Твоей милостью, которая объяла всё, прости меня
+                </div>
                 <div class="dua-source">— Дуа Пророка ﷺ</div>
             </div>
         </div>
 
+        <!-- Важные даты с анимацией -->
         <div class="important-dates">
             <h3><i class="fas fa-star"></i> Важные дни</h3>
             <div class="dates-grid">
-                <div class="date-item">
+                <div class="date-item bounce-in">
                     <span class="date-day">1</span>
                     <span class="date-label">Начало Рамадана</span>
                     <span class="date-gregorian">18 февраля</span>
+                    <div class="date-badge" id="startBadge">✨</div>
                 </div>
-                <div class="date-item highlight">
+                <div class="date-item highlight pulse-gold" id="laylatulQadr">
                     <span class="date-day">27</span>
                     <span class="date-label">Ляйлятуль-Кадр</span>
                     <span class="date-gregorian">15 марта</span>
+                    <div class="date-badge">⭐</div>
                 </div>
-                <div class="date-item">
+                <div class="date-item bounce-in">
                     <span class="date-day">31</span>
                     <span class="date-label">Последний день</span>
                     <span class="date-gregorian">20 марта</span>
+                    <div class="date-badge">🌙</div>
                 </div>
             </div>
         </div>
 
-        <div class="full-table-section">
-            <h3><i class="fas fa-table"></i> Полное расписание на месяц</h3>
+        <!-- Вдохновляющая цитата дня -->
+        <div class="quote-section fade-slide">
+            <div class="quote-card">
+                <i class="fas fa-quote-right quote-icon"></i>
+                <p class="quote-text" id="quoteOfDay">
+                    «Когда наступает Рамадан, врата Рая открываются»
+                </p>
+                <p class="quote-author">— Пророк Мухаммад ﷺ</p>
+            </div>
+        </div>
+
+        <!-- Полное расписание с живым поиском -->
+        <div class="full-table-section slide-up">
+            <h3><i class="fas fa-table"></i> Полное расписание</h3>
+            <div class="table-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="tableSearch" placeholder="Поиск по дате или дню..." class="search-input">
+            </div>
             <div class="table-responsive">
-                <table class="ramadan-table">
+                <table class="ramadan-table" id="ramadanTable">
                     <thead>
                         <tr>
                             <th>День</th>
@@ -128,36 +180,18 @@
             </div>
         </div>
 
-        <div class="info-section">
-            <div class="info-card">
-                <i class="fas fa-clock"></i>
-                <h4>Время Таравих</h4>
-                <p>Совершается после ночного намаза Иша</p>
+        <!-- Нижний колонтитул с анимацией -->
+        <footer class="footer">
+            <p>Сделано с ❤️ для благословенного месяца</p>
+            <p class="small-text">🕋 Рамадан 2026 / 1447 хиджры</p>
+            <div class="footer-decoration">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
             </div>
-            <div class="info-card">
-                <i class="fas fa-moon"></i>
-                <h4>Ляйлятуль-Кадр</h4>
-                <p>Ищите в последние 10 ночей Рамадана</p>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-hand-holding-heart"></i>
-                <h4>Фитр-садака</h4>
-                <p>Размер: 400 руб. (2026)</p>
-            </div>
-        </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
-    
-    <!-- Register Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/ramadan-timetable-2026/sw.js')
-                    .then(reg => console.log('✅ PWA ready!', reg.scope))
-                    .catch(err => console.log('❌ PWA error:', err));
-            });
-        }
-    </script>
 </body>
 </html>
