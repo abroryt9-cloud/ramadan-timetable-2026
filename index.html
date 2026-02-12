@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рамадан 2026 — Щёлково</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Звёздное небо -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1 class="ramadan-title">🌙 Рамадан 2026</h1>
+                <p class="subtitle">1447 год хиджры</p>
+                <div class="location-badge">
+                    <i class="fas fa-map-marker-alt"></i> Щёлково, Московская область
+                </div>
+            </div>
+        </header>
+
+        <!-- Прогресс и текущий день -->
+        <div class="today-highlight">
+            <div class="today-card">
+                <div class="today-header">
+                    <span class="today-label">Сегодня</span>
+                    <span class="hijri-date" id="hijriDate">18 Рамадана 1447</span>
+                </div>
+                <div class="today-main">
+                    <div class="day-number" id="currentDay">7</div>
+                    <div class="day-info">
+                        <span class="gregorian-date" id="gregorianDate">7 марта 2026, суббота</span>
+                        <span class="day-name">18-й день Рамадана</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Время Сухур и Ифтар -->
+        <div class="prayer-times-main">
+            <div class="prayer-card suhoor-card">
+                <div class="prayer-icon">🌅</div>
+                <h3>Сухур</h3>
+                <div class="time-large" id="suhoorTime">04:59</div>
+                <div class="time-label">окончание приёма пищи</div>
+                <div class="time-note">Фаджр</div>
+            </div>
+            <div class="prayer-card iftar-card">
+                <div class="prayer-icon">🌇</div>
+                <h3>Ифтар</h3>
+                <div class="time-large" id="iftarTime">18:17</div>
+                <div class="time-label">время разговения</div>
+                <div class="time-note">Магриб</div>
+            </div>
+        </div>
+
+        <!-- Прогресс Рамадана -->
+        <div class="progress-section">
+            <h3><i class="fas fa-chart-line"></i> Прогресс Рамадана</h3>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 60%;"></div>
+                </div>
+                <div class="progress-stats">
+                    <span id="daysPassed">18</span>/30 дней
+                    <span class="days-remaining">(осталось 12)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дуа дня -->
+        <div class="dua-section">
+            <h3><i class="fas fa-hands"></i> Дуа дня</h3>
+            <div class="dua-card">
+                <div class="dua-arabic" id="duaArabic">
+                    اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي
+                </div>
+                <div class="dua-translation" id="duaTranslation">
+                    О Аллах, прошу Тебя Твоей милостью, которая объяла всё, прости меня
+                </div>
+                <div class="dua-source">— Дуа Пророка ﷺ</div>
+            </div>
+        </div>
+
+        <!-- Важные даты -->
+        <div class="important-dates">
+            <h3><i class="fas fa-star"></i> Важные дни</h3>
+            <div class="dates-grid">
+                <div class="date-item">
+                    <span class="date-day">1</span>
+                    <span class="date-label">Начало Рамадана</span>
+                    <span class="date-gregorian">18 февраля</span>
+                </div>
+                <div class="date-item highlight">
+                    <span class="date-day">27</span>
+                    <span class="date-label">Ляйлятуль-Кадр</span>
+                    <span class="date-gregorian">15 марта</span>
+                </div>
+                <div class="date-item">
+                    <span class="date-day">31</span>
+                    <span class="date-label">Последний день</span>
+                    <span class="date-gregorian">20 марта</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Полное расписание -->
+        <div class="full-table-section">
+            <h3><i class="fas fa-table"></i> Полное расписание на месяц</h3>
+            <div class="table-responsive">
+                <table class="ramadan-table">
+                    <thead>
+                        <tr>
+                            <th>День</th>
+                            <th>Дата</th>
+                            <th>Фаджр<br><small>Сухур</small></th>
+                            <th>Зухр</th>
+                            <th>Аср Шафи'и</th>
+                            <th>Аср Ханафи</th>
+                            <th>Магриб<br><small>Ифтар</small></th>
+                            <th>Иша<br><small>Таравих</small></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ramadanTableBody">
+                        <!-- Данные из таблицы -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Дополнительная информация -->
+        <div class="info-section">
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <h4>Время Таравих</h4>
+                <p>Совершается после ночного намаза Иша</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-moon"></i>
+                <h4>Ляйлятуль-Кадр</h4>
+                <p>Ищите в последние 10 ночей Рамадана</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-hand-holding-heart"></i>
+                <h4>Фитр-садака</h4>
+                <p>Размер: 400 руб. (2026)</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+  </html>
