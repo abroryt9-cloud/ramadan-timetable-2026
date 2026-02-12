@@ -1,16 +1,22 @@
+/* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ===== */
 :root {
-    --primary: #1a3b5c;
-    --primary-dark: #0e2a44;
-    --accent: #c7a54b;
-    --accent-light: #e6d2a6;
+    --primary: #0e1a2b;
+    --primary-dark: #0a121f;
+    --accent: #c8a951;
+    --accent-light: #e6d6a8;
     --gold: #ffd700;
-    --night: #0b1a2b;
-    --deep-blue: #13293D;
-    --text-light: #f5f5f7;
-    --card-bg: rgba(255, 255, 255, 0.1);
-    --card-border: rgba(255, 255, 255, 0.2);
+    --gold-glow: rgba(255, 215, 0, 0.6);
+    --night: #0b1a2f;
+    --deep-blue: #0d2b4a;
+    --text-light: #fefcf7;
+    --text-dim: #e2dccd;
+    --card-bg: rgba(16, 30, 45, 0.7);
+    --card-border: rgba(200, 169, 81, 0.4);
+    --shadow: 0 20px 40px rgba(0,0,0,0.6);
+    --shadow-gold: 0 10px 30px rgba(200, 169, 81, 0.3);
 }
 
+/* ===== ГЛОБАЛЬНЫЕ СТИЛИ ===== */
 * {
     margin: 0;
     padding: 0;
@@ -19,15 +25,24 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(145deg, var(--night) 0%, #1a2f3f 100%);
+    background: linear-gradient(145deg, var(--night) 0%, #0c1e30 50%, #0a1825 100%);
     color: var(--text-light);
-    line-height: 1.6;
-    position: relative;
+    line-height: 1.7;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Звёздное небо */
-.stars, .twinkling {
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 50;
+}
+
+/* ===== АНИМИРОВАННЫЙ ФОН ===== */
+.stars, .twinkling, .clouds {
     position: fixed;
     top: 0;
     left: 0;
@@ -37,12 +52,13 @@ body {
     height: 100%;
     display: block;
     pointer-events: none;
+    z-index: 0;
 }
 
 .stars {
     background: #000 url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSI2IiBjeT0iMTQiIHI9IjEiIGZpbGw9IndoaXRlIi8+PC9zdmc+');
     background-size: 200px 200px;
-    opacity: 0.8;
+    animation: starPulse 8s infinite alternate;
 }
 
 .twinkling {
@@ -51,75 +67,279 @@ body {
     animation: twinkle 5s infinite;
 }
 
+.clouds {
+    background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIvPjwvc3ZnPg==');
+    background-size: 400px 200px;
+    animation: moveClouds 40s linear infinite;
+    opacity: 0.3;
+}
+
+/* ===== ПАДАЮЩИЕ ЗВЕЗДЫ ===== */
+.shooting-star, .shooting-star2, .shooting-star3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    border-radius: 100%;
+    opacity: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.shooting-star {
+    animation: shooting 15s infinite ease-in-out;
+    animation-delay: 2s;
+}
+
+.shooting-star2 {
+    animation: shooting 18s infinite ease-in-out;
+    animation-delay: 7s;
+    top: 30%;
+}
+
+.shooting-star3 {
+    animation: shooting 22s infinite ease-in-out;
+    animation-delay: 12s;
+    top: 60%;
+}
+
+/* ===== ПОЛУМЕСЯЦ ===== */
+.moon {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fffde7, #ffe68f);
+    box-shadow: 0 0 50px 10px rgba(255, 215, 0, 0.5);
+    animation: moonGlow 4s infinite alternate;
+    z-index: 100;
+}
+
+.moon-glow {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0) 70%);
+    animation: glowPulse 3s infinite alternate;
+    z-index: 99;
+    pointer-events: none;
+}
+
+/* ===== АНИМАЦИИ ===== */
+@keyframes starPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
 @keyframes twinkle {
-    0% { opacity: 0.3; }
-    50% { opacity: 1; }
-    100% { opacity: 0.3; }
+    0% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.2; }
 }
 
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
+@keyframes moveClouds {
+    0% { background-position: 0 0; }
+    100% { background-position: 400px 200px; }
+}
+
+@keyframes shooting {
+    0% { transform: translateX(-100%) translateY(0) rotate(15deg); opacity: 0; }
+    10% { opacity: 1; }
+    20% { transform: translateX(500%) translateY(200px) rotate(15deg); opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes moonGlow {
+    0% { box-shadow: 0 0 30px 5px rgba(255, 215, 0, 0.5); }
+    100% { box-shadow: 0 0 60px 15px rgba(255, 215, 0, 0.8); }
+}
+
+@keyframes glowPulse {
+    0% { transform: scale(0.9); opacity: 0.3; }
+    100% { transform: scale(1.2); opacity: 0.6; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes flipIn {
+    0% { transform: perspective(400px) rotateX(90deg); opacity: 0; }
+    100% { transform: perspective(400px) rotateX(0); opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 10px var(--gold); }
+    100% { text-shadow: 0 0 30px var(--gold), 0 0 50px var(--accent); }
+}
+
+/* ===== КЛАССЫ АНИМАЦИЙ ===== */
+.float { animation: float 6s infinite ease-in-out; }
+.floating { animation: float 4s infinite ease-in-out; }
+.floating-delay { animation: float 5s infinite ease-in-out 1s; }
+.pulse { animation: pulse 3s infinite; }
+.pulse-gold { animation: pulse 2s infinite; }
+.rotating { animation: rotate 10s infinite linear; }
+.shimmer { 
     position: relative;
-    z-index: 10;
+    overflow: hidden;
+}
+.shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+.fade-in { animation: slideIn 1s ease-out; }
+.slide-down { animation: slideIn 1s ease-out; }
+.slide-up { animation: slideIn 1s ease-out 0.2s both; }
+.flip-in { animation: flipIn 1s ease-out; }
+.bounce-in { animation: bounce 1s ease-out; }
+.glass-card { 
+    background: rgba(16, 30, 45, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+.glow-text {
+    animation: glow 3s infinite alternate;
 }
 
-/* Header */
+/* ===== ХЕДЕР ===== */
 header {
     text-align: center;
-    padding: 40px 20px;
-    background: rgba(19, 41, 61, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 30px;
+    padding: 50px 30px;
+    background: rgba(10, 20, 30, 0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 50px;
     margin-bottom: 30px;
     border: 1px solid var(--card-border);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow);
+    transform-style: preserve-3d;
 }
 
 .ramadan-title {
     font-family: 'Amiri', serif;
-    font-size: 3.5em;
+    font-size: 4.2em;
     color: var(--gold);
-    text-shadow: 0 0 20px rgba(255,215,0,0.3);
-    margin-bottom: 10px;
-    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.5);
+    margin-bottom: 15px;
+    letter-spacing: 6px;
+    font-weight: 900;
 }
 
 .subtitle {
-    font-size: 1.2em;
-    opacity: 0.9;
-    margin-bottom: 15px;
+    font-size: 1.4em;
+    margin-bottom: 20px;
     color: var(--accent-light);
+    font-weight: 300;
+    letter-spacing: 2px;
 }
 
 .location-badge {
     display: inline-block;
-    background: rgba(199, 165, 75, 0.2);
-    padding: 10px 25px;
+    background: rgba(200, 169, 81, 0.15);
+    padding: 12px 30px;
     border-radius: 50px;
     border: 1px solid var(--accent);
     color: var(--accent-light);
-    font-weight: 500;
+    font-weight: 600;
     backdrop-filter: blur(5px);
+    font-size: 1.1em;
 }
 
-.location-badge i {
-    margin-right: 8px;
-    color: var(--gold);
-}
-
-/* Today Highlight */
-.today-highlight {
+/* ===== ЖИВЫЕ ЧАСЫ ===== */
+.live-time-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.live-time-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent);
+    border-radius: 30px;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--gold);
+    box-shadow: 0 0 20px rgba(200,169,81,0.2);
+    flex: 1;
+}
+
+.countdown-card {
+    background: linear-gradient(145deg, var(--deep-blue), var(--primary));
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--text-light);
+    flex: 1;
+}
+
+/* ===== СЕГОДНЯ ===== */
+.today-highlight {
+    margin-bottom: 40px;
+    perspective: 1000px;
 }
 
 .today-card {
-    background: linear-gradient(135deg, var(--deep-blue), var(--primary-dark));
-    border-radius: 25px;
-    padding: 25px;
-    border: 1px solid rgba(199, 165, 75, 0.3);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    background: linear-gradient(145deg, var(--deep-blue), #0e2a44);
+    border-radius: 30px;
+    padding: 30px;
+    border: 1px solid var(--accent);
+    box-shadow: var(--shadow-gold);
+    position: relative;
+    overflow: hidden;
 }
 
 .today-header {
@@ -128,263 +348,318 @@ header {
     align-items: center;
     margin-bottom: 20px;
     color: var(--accent-light);
+    font-size: 1.2em;
 }
 
 .today-label {
-    background: var(--accent);
+    background: var(--gold);
     color: var(--deep-blue);
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9em;
+    padding: 8px 25px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1em;
+    letter-spacing: 1px;
 }
 
-.today-main {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.day-number-wrapper {
+    position: relative;
+    display: inline-block;
 }
 
 .day-number {
-    font-size: 5em;
-    font-weight: 700;
+    font-size: 6em;
+    font-weight: 900;
     color: var(--gold);
     line-height: 1;
     font-family: 'Amiri', serif;
+    text-shadow: 0 0 30px rgba(255,215,0,0.5);
+    position: relative;
+    z-index: 2;
 }
 
-.day-info {
-    display: flex;
-    flex-direction: column;
+.day-number-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0) 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: pulse 3s infinite;
 }
 
-.gregorian-date {
-    font-size: 1.3em;
-    font-weight: 600;
-}
-
-.day-name {
-    opacity: 0.9;
-    font-size: 1.1em;
-}
-
-/* Prayer Times Main */
+/* ===== ВРЕМЯ НАМАЗОВ ===== */
 .prayer-times-main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 40px;
+    gap: 30px;
+    margin-bottom: 50px;
 }
 
 .prayer-card {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     border: 1px solid var(--card-border);
-    border-radius: 30px;
-    padding: 30px;
+    border-radius: 40px;
+    padding: 35px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
 }
 
 .prayer-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
-    box-shadow: 0 15px 30px rgba(199, 165, 75, 0.15);
+    transform: translateY(-15px) scale(1.02);
+    border-color: var(--gold);
+    box-shadow: 0 20px 40px rgba(200, 169, 81, 0.3);
 }
 
 .prayer-icon {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+    font-size: 3.5em;
+    margin-bottom: 15px;
 }
 
 .prayer-card h3 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+    font-size: 1.8em;
+    margin-bottom: 20px;
     color: var(--accent-light);
+    font-weight: 700;
 }
 
 .time-large {
-    font-size: 3.5em;
-    font-weight: 700;
+    font-size: 4.5em;
+    font-weight: 900;
     color: var(--gold);
     font-family: 'Amiri', serif;
     line-height: 1;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
 }
 
-.time-label {
+.reminder-badge {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: var(--gold);
+    color: var(--deep-blue);
+    padding: 5px 15px;
+    border-radius: 30px;
     font-size: 0.9em;
-    opacity: 0.8;
-    margin-bottom: 5px;
+    font-weight: 700;
 }
 
-.time-note {
-    font-size: 0.9em;
-    color: var(--accent-light);
-}
-
-/* Progress Section */
+/* ===== ПРОГРЕСС ===== */
 .progress-section {
-    background: rgba(19, 41, 61, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 25px;
-    padding: 25px;
+    background: rgba(16, 30, 45, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 40px;
+    padding: 30px;
     margin-bottom: 40px;
     border: 1px solid var(--card-border);
 }
 
-.progress-section h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    color: var(--accent-light);
-}
-
-.progress-container {
+.progress-bar-wrapper {
     width: 100%;
 }
 
 .progress-bar {
     width: 100%;
-    height: 20px;
+    height: 25px;
     background: rgba(255,255,255,0.1);
-    border-radius: 10px;
+    border-radius: 15px;
     overflow: hidden;
     margin-bottom: 15px;
+    border: 1px solid rgba(200,169,81,0.3);
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent), var(--gold));
-    border-radius: 10px;
-    transition: width 0.5s ease;
+    border-radius: 15px;
+    transition: width 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
 }
 
 .progress-stats {
-    font-size: 1.2em;
-    font-weight: 600;
+    font-size: 1.4em;
+    font-weight: 700;
     display: flex;
-    gap: 10px;
+    gap: 15px;
     align-items: center;
 }
 
-.days-remaining {
-    font-size: 0.8em;
-    opacity: 0.8;
-    font-weight: 400;
+.days-counter {
+    color: var(--gold);
+    font-size: 1.8em;
+    font-weight: 900;
 }
 
-/* Dua Section */
+.ramadan-phase {
+    margin-top: 15px;
+    font-size: 1.2em;
+    color: var(--accent-light);
+    padding: 10px;
+    border-radius: 30px;
+    background: rgba(200,169,81,0.1);
+    text-align: center;
+}
+
+/* ===== ДУА ===== */
 .dua-section {
     margin-bottom: 40px;
 }
 
-.dua-section h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    color: var(--accent-light);
-}
-
 .dua-card {
-    background: linear-gradient(145deg, var(--deep-blue), var(--primary-dark));
-    border-radius: 30px;
-    padding: 40px;
+    background: linear-gradient(145deg, #0e2a44, #0a1e30);
+    border-radius: 40px;
+    padding: 50px 40px;
     text-align: center;
-    border: 1px solid var(--accent);
-    box-shadow: 0 0 30px rgba(199, 165, 75, 0.2);
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 50px rgba(200, 169, 81, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
 .dua-arabic {
     font-family: 'Amiri', serif;
-    font-size: 1.8em;
+    font-size: 2.2em;
     line-height: 1.8;
     color: var(--gold);
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
 .dua-translation {
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    color: var(--text-light);
-}
-
-.dua-source {
-    font-style: italic;
-    opacity: 0.8;
-}
-
-/* Important Dates */
-.important-dates {
-    margin-bottom: 40px;
-}
-
-.important-dates h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 1.3em;
     margin-bottom: 20px;
-    color: var(--accent-light);
+    color: var(--text-light);
+    font-weight: 400;
 }
 
+/* ===== ВАЖНЫЕ ДАТЫ ===== */
 .dates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
 .date-item {
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border: 1px solid var(--card-border);
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 30px;
+    padding: 25px;
     text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.date-item.highlight {
+.date-item:hover {
+    transform: scale(1.05);
     border-color: var(--gold);
-    background: rgba(199, 165, 75, 0.15);
+    box-shadow: 0 0 30px rgba(200,169,81,0.3);
 }
 
 .date-day {
     display: block;
-    font-size: 2em;
-    font-weight: 700;
+    font-size: 3em;
+    font-weight: 900;
     color: var(--gold);
     margin-bottom: 5px;
+    font-family: 'Amiri', serif;
 }
 
-.date-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 5px;
+.date-badge {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.8em;
+    opacity: 0.6;
 }
 
-.date-gregorian {
-    display: block;
-    font-size: 0.9em;
-    opacity: 0.8;
-}
-
-/* Full Table */
-.full-table-section {
+/* ===== ЦИТАТА ДНЯ ===== */
+.quote-section {
     margin-bottom: 40px;
-    background: rgba(19, 41, 61, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 25px;
-    padding: 25px;
+}
+
+.quote-card {
+    background: linear-gradient(145deg, #1a3349, #0e1e2c);
+    border-radius: 30px;
+    padding: 40px;
+    text-align: center;
+    border: 1px dashed var(--accent);
+    position: relative;
+}
+
+.quote-icon {
+    font-size: 2.5em;
+    color: var(--accent);
+    opacity: 0.5;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.quote-text {
+    font-size: 1.5em;
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+.quote-author {
+    color: var(--accent-light);
+    font-size: 1.1em;
+}
+
+/* ===== ТАБЛИЦА ===== */
+.full-table-section {
+    margin-bottom: 50px;
+    background: rgba(16, 30, 45, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 40px;
+    padding: 30px;
     border: 1px solid var(--card-border);
 }
 
-.full-table-section h3 {
+.table-search {
     display: flex;
     align-items: center;
-    gap: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    padding: 5px 20px;
     margin-bottom: 25px;
-    color: var(--accent-light);
+    border: 1px solid var(--card-border);
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    color: var(--text-light);
+    font-size: 1.1em;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(255,255,255,0.5);
 }
 
 .table-responsive {
@@ -398,105 +673,76 @@ header {
 }
 
 .ramadan-table th {
-    background: rgba(199, 165, 75, 0.2);
-    padding: 15px 10px;
-    font-weight: 600;
-    color: var(--accent-light);
-    border-bottom: 2px solid var(--accent);
+    background: rgba(200, 169, 81, 0.2);
+    padding: 18px 12px;
+    font-weight: 700;
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+    font-size: 1.05em;
 }
 
 .ramadan-table td {
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     text-align: center;
+    transition: background 0.3s ease;
+}
+
+.ramadan-table tr {
+    transition: all 0.2s ease;
 }
 
 .ramadan-table tr:hover td {
-    background: rgba(199, 165, 75, 0.1);
+    background: rgba(200, 169, 81, 0.15);
+    transform: scale(1.01);
 }
 
-.ramadan-table tr:first-child td {
+.ramadan-table tr.current-day td {
+    background: rgba(255, 215, 0, 0.15);
+    border-left: 3px solid var(--gold);
+    border-right: 3px solid var(--gold);
     font-weight: 600;
-    color: var(--gold);
 }
 
-/* Info Section */
-.info-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    margin-top: 40px;
-}
-
-.info-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--card-border);
-    border-radius: 20px;
-    padding: 25px;
+/* ===== ФУТЕР ===== */
+.footer {
     text-align: center;
+    padding: 40px;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    margin-top: 30px;
+    border: 1px solid rgba(200,169,81,0.2);
 }
 
-.info-card i {
-    font-size: 2.5em;
-    color: var(--accent);
-    margin-bottom: 15px;
-}
-
-.info-card h4 {
-    font-size: 1.2em;
+.footer p {
     margin-bottom: 10px;
-    color: var(--accent-light);
+    color: var(--text-dim);
 }
 
-.info-card p {
-    opacity: 0.9;
-    font-size: 0.95em;
+.footer-decoration {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-/* Responsive */
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* ===== МЕДИА-ЗАПРОСЫ ===== */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
+    .container { padding: 15px; }
+    .ramadan-title { font-size: 2.5em; }
+    .prayer-times-main { grid-template-columns: 1fr; }
+    .time-large { font-size: 3.5em; }
+    .dua-arabic { font-size: 1.6em; }
+    .day-number { font-size: 4.5em; }
+    .live-time-section { flex-direction: column; }
+    .moon { top: 20px; right: 20px; width: 40px; height: 40px; }
     }
-    
-    .ramadan-title {
-        font-size: 2.2em;
-    }
-    
-    .prayer-times-main {
-        grid-template-columns: 1fr;
-    }
-    
-    .today-main {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .dua-arabic {
-        font-size: 1.3em;
-    }
-    
-    .time-large {
-        font-size: 2.5em;
-    }
-}
-
-@media (max-width: 480px) {
-    .ramadan-title {
-        font-size: 1.8em;
-    }
-    
-    .date-item {
-        padding: 15px;
-    }
-    
-    .ramadan-table {
-        font-size: 0.85em;
-    }
-    
-    .ramadan-table th, 
-    .ramadan-table td {
-        padding: 8px 5px;
-    }
-  }
