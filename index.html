@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Рамадан 2026 — Щёлково</title>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="/ramadan-timetable-2026/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Рамадан 2026">
+    <link rel="apple-touch-icon" href="/ramadan-timetable-2026/icons/icon-192.png">
+    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Звёздное небо -->
     <div class="stars"></div>
     <div class="twinkling"></div>
     
@@ -24,70 +31,61 @@
             </div>
         </header>
 
-        <!-- Прогресс и текущий день -->
         <div class="today-highlight">
             <div class="today-card">
                 <div class="today-header">
                     <span class="today-label">Сегодня</span>
-                    <span class="hijri-date" id="hijriDate">18 Рамадана 1447</span>
+                    <span class="hijri-date" id="hijriDate"></span>
                 </div>
                 <div class="today-main">
-                    <div class="day-number" id="currentDay">7</div>
+                    <div class="day-number" id="currentDay"></div>
                     <div class="day-info">
-                        <span class="gregorian-date" id="gregorianDate">7 марта 2026, суббота</span>
-                        <span class="day-name">18-й день Рамадана</span>
+                        <span class="gregorian-date" id="gregorianDate"></span>
+                        <span class="day-name" id="dayName"></span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Время Сухур и Ифтар -->
         <div class="prayer-times-main">
             <div class="prayer-card suhoor-card">
                 <div class="prayer-icon">🌅</div>
                 <h3>Сухур</h3>
-                <div class="time-large" id="suhoorTime">04:59</div>
+                <div class="time-large" id="suhoorTime"></div>
                 <div class="time-label">окончание приёма пищи</div>
                 <div class="time-note">Фаджр</div>
             </div>
             <div class="prayer-card iftar-card">
                 <div class="prayer-icon">🌇</div>
                 <h3>Ифтар</h3>
-                <div class="time-large" id="iftarTime">18:17</div>
+                <div class="time-large" id="iftarTime"></div>
                 <div class="time-label">время разговения</div>
                 <div class="time-note">Магриб</div>
             </div>
         </div>
 
-        <!-- Прогресс Рамадана -->
         <div class="progress-section">
             <h3><i class="fas fa-chart-line"></i> Прогресс Рамадана</h3>
             <div class="progress-container">
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 60%;"></div>
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
                 <div class="progress-stats">
-                    <span id="daysPassed">18</span>/30 дней
-                    <span class="days-remaining">(осталось 12)</span>
+                    <span id="daysPassed"></span>/30 дней
+                    <span class="days-remaining" id="daysRemaining"></span>
                 </div>
             </div>
         </div>
 
-        <!-- Дуа дня -->
         <div class="dua-section">
             <h3><i class="fas fa-hands"></i> Дуа дня</h3>
             <div class="dua-card">
-                <div class="dua-arabic" id="duaArabic">
-                    اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي
-                </div>
-                <div class="dua-translation" id="duaTranslation">
-                    О Аллах, прошу Тебя Твоей милостью, которая объяла всё, прости меня
-                </div>
+                <div class="dua-arabic" id="duaArabic"></div>
+                <div class="dua-translation" id="duaTranslation"></div>
                 <div class="dua-source">— Дуа Пророка ﷺ</div>
             </div>
         </div>
 
-        <!-- Важные даты -->
         <div class="important-dates">
             <h3><i class="fas fa-star"></i> Важные дни</h3>
             <div class="dates-grid">
@@ -109,7 +107,6 @@
             </div>
         </div>
 
-        <!-- Полное расписание -->
         <div class="full-table-section">
             <h3><i class="fas fa-table"></i> Полное расписание на месяц</h3>
             <div class="table-responsive">
@@ -126,14 +123,11 @@
                             <th>Иша<br><small>Таравих</small></th>
                         </tr>
                     </thead>
-                    <tbody id="ramadanTableBody">
-                        <!-- Данные из script.js -->
-                    </tbody>
+                    <tbody id="ramadanTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Дополнительная информация -->
         <div class="info-section">
             <div class="info-card">
                 <i class="fas fa-clock"></i>
@@ -154,5 +148,16 @@
     </div>
 
     <script src="script.js"></script>
+    
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/ramadan-timetable-2026/sw.js')
+                    .then(reg => console.log('✅ PWA ready!', reg.scope))
+                    .catch(err => console.log('❌ PWA error:', err));
+            });
+        }
+    </script>
 </body>
 </html>
