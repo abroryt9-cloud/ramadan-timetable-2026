@@ -188,3 +188,146 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setInterval(updateLiveClock, 1000);
 });
+// ============================================
+// 📅 КАРТОЧКИ ДНЕЙ - БЕЗ ТАБЛИЦЫ
+// ============================================
+
+let currentDisplayDay = currentDayNumber || 1;
+if (currentDisplayDay === 0) currentDisplayDay = 1;
+
+// ЭЛЕМЕНТЫ КАРТОЧКИ
+const dayCardElements = {
+    number: document.getElementById('cardDayNumber'),
+    date: document.getElementById('cardDate'),
+    fajr: document.getElementById('cardFajr'),
+    zuhr: document.getElementById('cardZuhr'),
+    asrShafi: document.getElementById('cardAsrShafi'),
+    asrHanafi: document.getElementById('cardAsrHanafi'),
+    maghrib: document.getElementById('cardMaghrib'),
+    isha: document.getElementById('cardIsha'),
+    currentDisplay: document.getElementById('currentDisplayDay'),
+    minDay: document.getElementById('minDay'),
+    maxDay: document.getElementById('maxDay'),
+    dots: document.getElementById('dayDots')
+};
+
+// ФУНКЦИЯ ОБНОВЛЕНИЯ КАРТОЧКИ
+function updateDayCard(dayNumber) {
+    const dayData = ramadanData[dayNumber - 1];
+    if (!dayData) return;
+    
+    // Обновляем все поля
+    dayCardElements.number.textContent = dayData.day;
+    dayCardElements.date.textContent = dayData.date;
+    dayCardElements.fajr.textContent = dayData.fajr;
+    dayCardElements.zuhr.textContent = dayData.zuhr;
+    dayCardElements.asrShafi.textContent = dayData.asrShafi;
+    dayCardElements.asrHanafi.textContent = dayData.asrHanafi;
+    dayCardElements.maghrib.textContent = dayData.maghrib;
+    dayCardElements.isha.textContent = dayData.isha;
+    dayCardElements.currentDisplay.textContent = dayData.day;
+    
+    // Подсвечиваем текущий день
+    if (currentDayNumber !== 0 && dayNumber === currentDayNumber) {
+        document.querySelector('.day-card').classList.add('current-day-card');
+    } else {
+        document.querySelector('.day-card').classList.remove('current-day-card');
+    }
+    
+    // Обновляем активную точку
+    updateActiveDot(dayNumber);
+}
+
+// СОЗДАНИЕ ТОЧЕК-ИНДИКАТОРОВ
+function createDayDots() {
+    if (!dayCardElements.dots) return;
+    
+    dayCardElements.dots.innerHTML = '';
+    dayCardElements.minDay.textContent = '1';
+    dayCardElements.maxDay.textContent = '31';
+    
+    for (let i = 1; i <= 31; i++) {
+        const dot = document.createElement('span');
+        dot.classList.add('day-dot');
+        dot.setAttribute('data-day', i);
+        
+        // Подсвечиваем сегодняшний день
+        if (currentDayNumber !== 0 && i === currentDayNumber) {
+            dot.classList.add('today');
+        }
+        
+        // Клик по точке
+        dot.addEventListener('click', function() {
+            const day = parseInt(this.getAttribute('data-day'));
+            currentDisplayDay = day;
+            updateDayCard(day);
+        });
+        
+        dayCardElements.dots.appendChild(dot);
+    }
+    
+    // Активируем текущий день
+    updateActiveDot(currentDisplayDay);
+}
+
+// АКТИВАЦИЯ ТОЧКИ
+function updateActiveDot(dayNumber) {
+    const dots = document.querySelectorAll('.day-dot');
+    dots.forEach(dot => {
+        dot.classList.remove('active');
+        if (parseInt(dot.getAttribute('data-day')) === dayNumber) {
+            dot.classList.add('active');
+        }
+    });
+}
+
+// НАВИГАЦИЯ ПО ДНЯМ
+document.addEventListener('DOMContentLoaded', function() {
+    // Создаём точки
+    createDayDots();
+    
+    // Показываем первый день
+    if (currentDayNumber !== 0) {
+        currentDisplayDay = currentDayNumber;
+    }
+    updateDayCard(currentDisplayDay);
+    
+    // Кнопки навигации
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+            if (currentDisplayDay > 1) {
+                currentDisplayDay--;
+                updateDayCard(currentDisplayDay);
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            if (currentDisplayDay < 31) {
+                currentDisplayDay++;
+                updateDayCard(currentDisplayDay);
+            }
+        });
+    }
+});
+
+// ДОБАВЛЯЕМ СТИЛИ ДЛЯ ТЕКУЩЕГО ДНЯ В КАРТОЧКЕ
+const style = document.createElement('style');
+style.textContent = `
+    .day-card.current-day-card {
+        border: 2px solid #ffd700;
+        box-shadow: 0 0 30px rgba(255,215,0,0.3);
+        animation: pulse-card 2s infinite;
+    }
+    
+    @keyframes pulse-card {
+        0% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+        50% { box-shadow: 0 0 40px rgba(255,215,0,0.5); }
+        100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+    }
+`;
+document.head.appendChild(style);
