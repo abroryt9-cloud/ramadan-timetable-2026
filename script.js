@@ -1,4 +1,3 @@
-// Данные расписания для Щёлково 2026
 const ramadanData = [
     {day: 1, date: '18.02, Ср.', fajr: '5:40', zuhr: '12:44', asrShafi: '15:06', asrHanafi: '15:45', maghrib: '17:40', isha: '19:38'},
     {day: 2, date: '19.02, Чт.', fajr: '5:38', zuhr: '12:44', asrShafi: '15:07', asrHanafi: '15:47', maghrib: '17:43', isha: '19:40'},
@@ -33,19 +32,18 @@ const ramadanData = [
     {day: 31, date: '20.03, Пт.', fajr: '4:21', zuhr: '12:38', asrShafi: '15:50', asrHanafi: '16:39', maghrib: '18:44', isha: '20:43'}
 ];
 
-// Коллекция дуа на каждый день
 const duas = [
     {
         arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي",
         translation: "О Аллах, прошу Тебя Твоей милостью, которая объяла всё, прости меня"
     },
     {
-        arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
-        translation: "Господь наш! Даруй нам в этом мире добро и в Последней жизни добро и защити нас от мучений в Огне"
-    },
-    {
         arabic: "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
         translation: "О Аллах, поистине, Ты - Прощающий, любишь прощать, прости же меня"
+    },
+    {
+        arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+        translation: "Господь наш! Даруй нам в этом мире добро и в Последней жизни добро и защити нас от мучений в Огне"
     },
     {
         arabic: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
@@ -60,14 +58,6 @@ const duas = [
 // Определяем текущий день (для демо используем 18-й день)
 const currentDayIndex = 17; // 0-based индекс для 18-го дня
 
-// Функция для форматирования даты
-function getCurrentGregorianDate() {
-    const today = new Date();
-    const options = { day: 'numeric', month: 'long', year: 'numeric', weekday: 'short' };
-    return today.toLocaleDateString('ru-RU', options);
-}
-
-// Заполняем таблицу
 function populateTable() {
     const tableBody = document.getElementById('ramadanTableBody');
     tableBody.innerHTML = '';
@@ -77,7 +67,6 @@ function populateTable() {
         if (index === currentDayIndex) {
             row.classList.add('current-day');
         }
-        
         row.innerHTML = `
             <td><strong>${day.day}</strong></td>
             <td>${day.date}</td>
@@ -92,30 +81,27 @@ function populateTable() {
     });
 }
 
-// Обновляем информацию о текущем дне
 function updateCurrentDayInfo() {
     const currentDay = ramadanData[currentDayIndex];
     
-    // Устанавливаем время сухура и ифтара
     document.getElementById('suhoorTime').textContent = currentDay.fajr;
     document.getElementById('iftarTime').textContent = currentDay.maghrib;
-    
-    // Устанавливаем даты
-    document.getElementById('hijriDate').textContent = `${currentDay.day + 17} Рамадана 1447`;
+    document.getElementById('hijriDate').textContent = `${currentDay.day} Рамадана 1447`;
     document.getElementById('gregorianDate').textContent = currentDay.date;
     document.getElementById('currentDay').textContent = currentDay.day;
+    document.getElementById('dayName').textContent = `${currentDay.day}-й день Рамадана`;
     
-    // Обновляем прогресс
     const progressFill = document.getElementById('progressFill');
     const daysPassed = document.getElementById('daysPassed');
+    const daysRemaining = document.getElementById('daysRemaining');
     const progressPercentage = (currentDay.day / 31) * 100;
+    
     progressFill.style.width = `${progressPercentage}%`;
     daysPassed.textContent = currentDay.day;
+    daysRemaining.textContent = `(осталось ${31 - currentDay.day})`;
 }
 
-// Обновляем дуа дня
 function updateDuaOfTheDay() {
-    // Берем дуа на основе текущего дня
     const duaIndex = currentDayIndex % duas.length;
     const dua = duas[duaIndex];
     
@@ -123,14 +109,8 @@ function updateDuaOfTheDay() {
     document.getElementById('duaTranslation').textContent = dua.translation;
 }
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     populateTable();
     updateCurrentDayInfo();
     updateDuaOfTheDay();
 });
-
-// Обновление каждый день
-setInterval(() => {
-    location.reload();
-}, 86400000); // 24 часа
