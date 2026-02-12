@@ -1,3 +1,11 @@
+// ============================================
+// 🌙 РАМАДАН 2026 — ЩЁЛКОВО
+// Полное расписание с автоопределением даты
+// ============================================
+
+// --------------------------------------------
+// 📅 ДАННЫЕ РАСПИСАНИЯ
+// --------------------------------------------
 const ramadanData = [
     {day: 1, date: '18.02, Ср.', fajr: '5:40', zuhr: '12:44', asrShafi: '15:06', asrHanafi: '15:45', maghrib: '17:40', isha: '19:38'},
     {day: 2, date: '19.02, Чт.', fajr: '5:38', zuhr: '12:44', asrShafi: '15:07', asrHanafi: '15:47', maghrib: '17:43', isha: '19:40'},
@@ -32,6 +40,9 @@ const ramadanData = [
     {day: 31, date: '20.03, Пт.', fajr: '4:21', zuhr: '12:38', asrShafi: '15:50', asrHanafi: '16:39', maghrib: '18:44', isha: '20:43'}
 ];
 
+// --------------------------------------------
+// 🤲 КОЛЛЕКЦИЯ ДУА
+// --------------------------------------------
 const duas = [
     {
         arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي",
@@ -55,18 +66,116 @@ const duas = [
     }
 ];
 
-// Определяем текущий день (для демо используем 18-й день)
-const currentDayIndex = 17; // 0-based индекс для 18-го дня
+// --------------------------------------------
+// 📌 КОЛЛЕКЦИЯ ЦИТАТ
+// --------------------------------------------
+const quotes = [
+    { text: "«Когда наступает Рамадан, врата Рая открываются»", author: "— Пророк Мухаммад ﷺ" },
+    { text: "«Кто постится в Рамадан с верой и надеждой, тому простятся прошлые грехи»", author: "— Пророк Мухаммад ﷺ" },
+    { text: "«Пост — это щит, укрывающий от огня»", author: "— Пророк Мухаммад ﷺ" },
+    { text: "«Садака в Рамадан — лучшая садака»", author: "— Пророк Мухаммад ﷺ" },
+    { text: "«Поистине, у постящегося есть две радости: радость при разговении и радость при встрече с Господом»", author: "— Пророк Мухаммад ﷺ" }
+];
 
+// --------------------------------------------
+// 🧠 ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО ДНЯ РАМАДАНА
+// --------------------------------------------
+function getCurrentRamadanDay() {
+    const today = new Date();
+    const ramadanStart = new Date(2026, 1, 18); // 18 февраля 2026
+    
+    // Обнуляем время для точного сравнения
+    today.setHours(0, 0, 0, 0);
+    ramadanStart.setHours(0, 0, 0, 0);
+    
+    const diffTime = today - ramadanStart;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    
+    // Логирование для отладки
+    console.log('Сегодня:', today.toLocaleDateString('ru-RU'));
+    console.log('Начало Рамадана:', ramadanStart.toLocaleDateString('ru-RU'));
+    console.log('Разница в днях:', diffDays);
+    
+    // Если ещё не начался
+    if (diffDays < 1) {
+        console.log('Статус: До Рамадана');
+        return 0; // Специальное значение
+    }
+    
+    // Если идёт Рамадан
+    if (diffDays >= 1 && diffDays <= 31) {
+        console.log('Статус: Рамадан, день', diffDays);
+        return diffDays;
+    }
+    
+    // Если Рамадан закончился
+    console.log('Статус: Рамадан завершён');
+    return 31; // Показываем последний день
+}
+
+// --------------------------------------------
+// ⏰ ОБРАТНЫЙ ОТСЧЁТ ДО РАМАДАНА
+// --------------------------------------------
+function getDaysUntilRamadan() {
+    const today = new Date();
+    const ramadanStart = new Date(2026, 1, 18);
+    
+    today.setHours(0, 0, 0, 0);
+    ramadanStart.setHours(0, 0, 0, 0);
+    
+    const diffTime = ramadanStart - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays > 0 ? diffDays : 0;
+}
+
+// --------------------------------------------
+// 🕋 ПОЛУЧЕНИЕ ФАЗЫ РАМАДАНА
+// --------------------------------------------
+function getRamadanPhase(day) {
+    if (day === 0) return "🕋 Ожидание Рамадана";
+    if (day <= 10) return "🌙 Первая декада — Милость";
+    if (day <= 20) return "✨ Вторая декада — Прощение";
+    if (day <= 30) return "🔥 Третья декада — Спасение от Огня";
+    return "🎉 Рамадан завершён";
+}
+
+// --------------------------------------------
+// 📊 ОПРЕДЕЛЯЕМ ТЕКУЩИЙ ДЕНЬ
+// --------------------------------------------
+const currentDayNumber = getCurrentRamadanDay();
+let currentDayIndex;
+
+if (currentDayNumber === 0) {
+    // До Рамадана — показываем 1-й день как предпросмотр
+    currentDayIndex = 0;
+} else {
+    // Во время или после Рамадана
+    currentDayIndex = Math.min(currentDayNumber - 1, 30);
+}
+
+// --------------------------------------------
+// 📋 ЗАПОЛНЕНИЕ ТАБЛИЦЫ
+// --------------------------------------------
 function populateTable() {
     const tableBody = document.getElementById('ramadanTableBody');
+    if (!tableBody) return;
+    
     tableBody.innerHTML = '';
     
     ramadanData.forEach((day, index) => {
         const row = document.createElement('tr');
-        if (index === currentDayIndex) {
+        
+        // Подсвечиваем текущий день
+        if (currentDayNumber !== 0 && index === currentDayIndex) {
             row.classList.add('current-day');
         }
+        
+        // Подсвечиваем 27 ночь (Ляйлятуль-Кадр)
+        if (day.day === 27) {
+            row.classList.add('laylatul-qadr');
+        }
+        
         row.innerHTML = `
             <td><strong>${day.day}</strong></td>
             <td>${day.date}</td>
@@ -81,36 +190,220 @@ function populateTable() {
     });
 }
 
+// --------------------------------------------
+// 🎯 ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ТЕКУЩЕМ ДНЕ
+// --------------------------------------------
 function updateCurrentDayInfo() {
     const currentDay = ramadanData[currentDayIndex];
+    const daysUntilRamadan = getDaysUntilRamadan();
     
+    // Обновляем время сухура и ифтара
     document.getElementById('suhoorTime').textContent = currentDay.fajr;
     document.getElementById('iftarTime').textContent = currentDay.maghrib;
-    document.getElementById('hijriDate').textContent = `${currentDay.day} Рамадана 1447`;
-    document.getElementById('gregorianDate').textContent = currentDay.date;
-    document.getElementById('currentDay').textContent = currentDay.day;
-    document.getElementById('dayName').textContent = `${currentDay.day}-й день Рамадана`;
     
+    // Обновляем обратный отсчёт
+    const countdownEl = document.getElementById('countdownText');
+    if (daysUntilRamadan > 0) {
+        countdownEl.innerHTML = `<i class="fas fa-hourglass-half"></i> До Рамадана: ${daysUntilRamadan} ${getDaysWord(daysUntilRamadan)}`;
+    } else if (daysUntilRamadan === 0) {
+        countdownEl.innerHTML = `<i class="fas fa-moon"></i> Рамадан начался! 🌙`;
+    } else {
+        const daysPassed = Math.abs(daysUntilRamadan);
+        countdownEl.innerHTML = `<i class="fas fa-star"></i> Рамадан: ${daysPassed} ${getDaysWord(daysPassed)}`;
+    }
+    
+    // Обновляем информацию о дате
+    if (currentDayNumber === 0) {
+        // До Рамадана
+        document.getElementById('hijriDate').textContent = `Ожидание Рамадана`;
+        document.getElementById('gregorianDate').textContent = new Date().toLocaleDateString('ru-RU', {
+            day: 'numeric', month: 'long', year: 'numeric', weekday: 'short'
+        });
+        document.getElementById('currentDay').textContent = '✨';
+        document.getElementById('dayName').textContent = `${daysUntilRamadan} дней до Рамадана`;
+    } else {
+        // Во время или после Рамадана
+        document.getElementById('hijriDate').textContent = `${currentDay.day} Рамадана 1447`;
+        document.getElementById('gregorianDate').textContent = currentDay.date;
+        document.getElementById('currentDay').textContent = currentDay.day;
+        document.getElementById('dayName').textContent = `${currentDay.day}-й день Рамадана`;
+    }
+    
+    // Обновляем прогресс
     const progressFill = document.getElementById('progressFill');
-    const daysPassed = document.getElementById('daysPassed');
-    const daysRemaining = document.getElementById('daysRemaining');
-    const progressPercentage = (currentDay.day / 31) * 100;
+    const daysPassedEl = document.getElementById('daysPassed');
+    const daysRemainingEl = document.getElementById('daysRemaining');
+    
+    let progressPercentage, daysDisplay, remainingDisplay;
+    
+    if (currentDayNumber === 0) {
+        progressPercentage = 0;
+        daysDisplay = 0;
+        remainingDisplay = 31;
+    } else {
+        progressPercentage = (currentDayNumber / 31) * 100;
+        daysDisplay = currentDayNumber;
+        remainingDisplay = 31 - currentDayNumber;
+    }
     
     progressFill.style.width = `${progressPercentage}%`;
-    daysPassed.textContent = currentDay.day;
-    daysRemaining.textContent = `(осталось ${31 - currentDay.day})`;
+    daysPassedEl.textContent = daysDisplay;
+    daysRemainingEl.textContent = `(осталось ${remainingDisplay})`;
+    
+    // Обновляем фазу Рамадана
+    const phaseEl = document.getElementById('ramadanPhase');
+    if (phaseEl) {
+        phaseEl.textContent = getRamadanPhase(currentDayNumber);
+    }
+    
+    // Обновляем напоминания
+    updateReminders();
 }
 
+// --------------------------------------------
+:// 🔔 ОБНОВЛЕНИЕ НАПОМИНАНИЙ
+// --------------------------------------------
+function updateReminders() {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    
+    // Парсим время сухура и ифтара
+    const suhoorTime = document.getElementById('suhoorTime').textContent;
+    const iftarTime = document.getElementById('iftarTime').textContent;
+    
+    const [suhoorHour, suhoorMin] = suhoorTime.split(':').map(Number);
+    const [iftarHour, iftarMin] = iftarTime.split(':').map(Number);
+    
+    // Напоминание о сухуре
+    const suhoorReminder = document.getElementById('suhoorReminder');
+    if (suhoorReminder) {
+        const timeDiff = (suhoorHour * 60 + suhoorMin) - (currentHour * 60 + currentMinute);
+        if (timeDiff > 0 && timeDiff < 60) {
+            suhoorReminder.textContent = `⏰ Через ${timeDiff} мин`;
+            suhoorReminder.style.background = '#ffd700';
+        } else {
+            suhoorReminder.textContent = '🌙';
+        }
+    }
+    
+    // Напоминание об ифтаре
+    const iftarReminder = document.getElementById('iftarReminder');
+    if (iftarReminder) {
+        const timeDiff = (iftarHour * 60 + iftarMin) - (currentHour * 60 + currentMinute);
+        if (timeDiff > 0 && timeDiff < 60) {
+            iftarReminder.textContent = `⏰ Через ${timeDiff} мин`;
+            iftarReminder.style.background = '#ffd700';
+        } else if (timeDiff < 0 && timeDiff > -60) {
+            iftarReminder.textContent = `🍽️ Ифтар начался`;
+            iftarReminder.style.background = '#4caf50';
+        } else {
+            iftarReminder.textContent = '⭐';
+        }
+    }
+}
+
+// --------------------------------------------
+// 🤲 ОБНОВЛЕНИЕ ДУА ДНЯ
+// --------------------------------------------
 function updateDuaOfTheDay() {
-    const duaIndex = currentDayIndex % duas.length;
+    let duaIndex;
+    
+    if (currentDayNumber === 0) {
+        // До Рамадана — случайное дуа
+        duaIndex = Math.floor(Math.random() * duas.length);
+    } else {
+        // Во время Рамадана — дуа по дню
+        duaIndex = (currentDayNumber - 1) % duas.length;
+    }
+    
     const dua = duas[duaIndex];
     
     document.getElementById('duaArabic').textContent = dua.arabic;
     document.getElementById('duaTranslation').textContent = dua.translation;
 }
 
+// --------------------------------------------
+:// 💭 ОБНОВЛЕНИЕ ЦИТАТЫ ДНЯ
+// --------------------------------------------
+function updateQuoteOfTheDay() {
+    const quoteIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[quoteIndex];
+    
+    const quoteEl = document.getElementById('quoteOfDay');
+    const authorEl = document.querySelector('.quote-author');
+    
+    if (quoteEl) quoteEl.textContent = quote.text;
+    if (authorEl) authorEl.textContent = quote.author;
+}
+
+// --------------------------------------------
+// 🔍 ПОИСК ПО ТАБЛИЦЕ
+// --------------------------------------------
+function setupSearch() {
+    const searchInput = document.getElementById('tableSearch');
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const tableRows = document.querySelectorAll('#ramadanTableBody tr');
+        
+        tableRows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+}
+
+// --------------------------------------------
+// ⏰ ЖИВЫЕ ЧАСЫ
+// --------------------------------------------
+function updateLiveClock() {
+    const clockEl = document.getElementById('liveClock');
+    if (!clockEl) return;
+    
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    
+    clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+// --------------------------------------------
+// 📝 ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// --------------------------------------------
+function getDaysWord(days) {
+    if (days % 10 === 1 && days % 100 !== 11) return 'день';
+    if ([2,3,4].includes(days % 10) && ![12,13,14].includes(days % 100)) return 'дня';
+    return 'дней';
+}
+
+// --------------------------------------------
+// 🚀 ИНИЦИАЛИЗАЦИЯ
+// --------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🌙 Сайт Рамадан 2026 загружен');
+    
     populateTable();
     updateCurrentDayInfo();
     updateDuaOfTheDay();
+    updateQuoteOfTheDay();
+    setupSearch();
+    updateLiveClock();
+    
+    // Обновляем часы каждую секунду
+    setInterval(updateLiveClock, 1000);
+    
+    // Обновляем напоминания каждую минуту
+    setInterval(updateReminders, 60000);
+    
+    // Добавляем эффект появления
+    document.body.classList.add('fade-in');
 });
+
+// Обработка ошибок
+window.onerror = function(msg, url, line) {
+    console.log('Ошибка:', msg, 'на строке', line);
+    return false;
+};
