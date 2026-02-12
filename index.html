@@ -135,7 +135,75 @@
                 <div class="dua-source">— Пророк ﷺ</div>
             </div>
         </div>
-
+<!-- ========== РАСПИСАНИЕ ПО ДНЯМ (КАРТОЧКИ) ========== -->
+<div class="daily-schedule-section">
+    <h3><i class="fas fa-calendar-alt"></i> 📅 Расписание на каждый день</h3>
+    <div class="schedule-controls">
+        <button id="prevDayBtn" class="schedule-nav"><i class="fas fa-chevron-left"></i></button>
+        <div class="current-day-info">
+            <span id="currentDisplayDay">1</span> день Рамадана
+        </div>
+        <button id="nextDayBtn" class="schedule-nav"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    
+    <div class="day-card-container">
+        <div class="day-card" id="dayCard">
+            <div class="day-card-header">
+                <span class="day-number-big" id="cardDayNumber">1</span>
+                <span class="day-date" id="cardDate">18.02, Ср.</span>
+            </div>
+            
+            <div class="prayer-times-grid">
+                <div class="prayer-time-item">
+                    <div class="prayer-label">🌅 Фаджр <small>(Сухур)</small></div>
+                    <div class="prayer-value" id="cardFajr">5:40</div>
+                </div>
+                
+                <div class="prayer-time-item">
+                    <div class="prayer-label">☀️ Зухр</div>
+                    <div class="prayer-value" id="cardZuhr">12:44</div>
+                </div>
+                
+                <div class="prayer-time-item">
+                    <div class="prayer-label">🕋 Аср Шафи'и</div>
+                    <div class="prayer-value" id="cardAsrShafi">15:06</div>
+                </div>
+                
+                <div class="prayer-time-item">
+                    <div class="prayer-label">🕌 Аср Ханафи</div>
+                    <div class="prayer-value" id="cardAsrHanafi">15:45</div>
+                </div>
+                
+                <div class="prayer-time-item highlight">
+                    <div class="prayer-label">🌇 Магриб <span class="iftar-badge">Ифтар</span></div>
+                    <div class="prayer-value iftar-time" id="cardMaghrib">17:40</div>
+                </div>
+                
+                <div class="prayer-time-item">
+                    <div class="prayer-label">🌙 Иша <small>(Таравих)</small></div>
+                    <div class="prayer-value" id="cardIsha">19:38</div>
+                </div>
+            </div>
+            
+            <div class="day-footer">
+                <div class="fasting-status">
+                    <i class="fas fa-check-circle"></i> Пост
+                </div>
+                <div class="day-dua">
+                    <i class="fas fa-hands"></i> Дуа сегодня
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ИНДИКАТОР ПРОГРЕССА ПО ДНЯМ -->
+    <div class="day-progress">
+        <span>День <span id="minDay">1</span> - <span id="maxDay">31</span></span>
+        <div class="day-dots" id="dayDots">
+            <!-- ДОТЫ БУДУТ СОЗДАНЫ ЧЕРЕЗ JS -->
+        </div>
+    </div>
+</div>
         <!-- ========== ВАЖНЫЕ ДАТЫ ========== -->
         <div class="important-dates">
             <h3><i class="fas fa-star"></i> Важные дни</h3>
@@ -170,28 +238,7 @@
             </div>
         </div>
 
-        <!-- ========== ПОЛНОЕ РАСПИСАНИЕ ========== -->
-        <div class="full-table-section slide-up">
-            <h3><i class="fas fa-table"></i> Расписание на месяц</h3>
-            <div class="table-responsive">
-                <table class="ramadan-table" id="ramadanTable">
-    <thead>
-        <tr>
-            <th>День</th>
-            <th>Дата</th>
-            <th>Фаджр<br><small>Сухур</small></th>
-            <th>Зухр</th>
-            <th>Аср<br><small>Шафи'и</small></th>
-            <th>Аср<br><small>Ханафи</small></th>
-            <th>Магриб<br><small>Ифтар</small></th>
-            <th>Иша<br><small>Таравих</small></th>
-        </tr>
-    </thead>
-    <tbody id="ramadanTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
+        
         <!-- ========== ПОДВАЛ ========== -->
         <footer class="footer">
             <p>С ❤️ для Рамадана 2026</p>
