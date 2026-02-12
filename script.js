@@ -54,68 +54,47 @@ const duas = [
     },
     {
         arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
-        translation: "Господь наш! Даруй нам в этом мире добро и в Последней жизни добро и защити нас от мучений в Огне"
+        translation: "Господь наш! Даруй нам в этом мире добро и в Последней жизни добро"
     },
     {
         arabic: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
-        translation: "О Аллах, помоги мне поминать Тебя, благодарить Тебя и должным образом поклоняться Тебе"
+        translation: "О Аллах, помоги мне поминать Тебя, благодарить и поклоняться"
     },
     {
         arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ",
-        translation: "О Аллах, прошу у Тебя Рая и прибегаю к Тебе от Ада"
+        translation: "О Аллах, прошу у Тебя Рая и прибегаю от Ада"
     }
 ];
 
 // --------------------------------------------
-// 📌 КОЛЛЕКЦИЯ ЦИТАТ
+// 📜 КОЛЛЕКЦИЯ ЦИТАТ
 // --------------------------------------------
 const quotes = [
     { text: "«Когда наступает Рамадан, врата Рая открываются»", author: "— Пророк Мухаммад ﷺ" },
     { text: "«Кто постится в Рамадан с верой и надеждой, тому простятся прошлые грехи»", author: "— Пророк Мухаммад ﷺ" },
     { text: "«Пост — это щит, укрывающий от огня»", author: "— Пророк Мухаммад ﷺ" },
     { text: "«Садака в Рамадан — лучшая садака»", author: "— Пророк Мухаммад ﷺ" },
-    { text: "«Поистине, у постящегося есть две радости: радость при разговении и радость при встрече с Господом»", author: "— Пророк Мухаммад ﷺ" }
+    { text: "«Поистине, у постящегося есть две радости»", author: "— Пророк Мухаммад ﷺ" }
 ];
 
 // --------------------------------------------
-// 🧠 ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО ДНЯ РАМАДАНА
+// 🧠 ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО ДНЯ
 // --------------------------------------------
 function getCurrentRamadanDay() {
     const today = new Date();
-    const ramadanStart = new Date(2026, 1, 18); // 18 февраля 2026
+    const ramadanStart = new Date(2026, 1, 18);
     
-    // Обнуляем время для точного сравнения
     today.setHours(0, 0, 0, 0);
     ramadanStart.setHours(0, 0, 0, 0);
     
     const diffTime = today - ramadanStart;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     
-    // Логирование для отладки
-    console.log('Сегодня:', today.toLocaleDateString('ru-RU'));
-    console.log('Начало Рамадана:', ramadanStart.toLocaleDateString('ru-RU'));
-    console.log('Разница в днях:', diffDays);
-    
-    // Если ещё не начался
-    if (diffDays < 1) {
-        console.log('Статус: До Рамадана');
-        return 0; // Специальное значение
-    }
-    
-    // Если идёт Рамадан
-    if (diffDays >= 1 && diffDays <= 31) {
-        console.log('Статус: Рамадан, день', diffDays);
-        return diffDays;
-    }
-    
-    // Если Рамадан закончился
-    console.log('Статус: Рамадан завершён');
-    return 31; // Показываем последний день
+    if (diffDays < 1) return 0;
+    if (diffDays > 31) return 31;
+    return diffDays;
 }
 
-// --------------------------------------------
-// ⏰ ОБРАТНЫЙ ОТСЧЁТ ДО РАМАДАНА
-// --------------------------------------------
 function getDaysUntilRamadan() {
     const today = new Date();
     const ramadanStart = new Date(2026, 1, 18);
@@ -124,38 +103,31 @@ function getDaysUntilRamadan() {
     ramadanStart.setHours(0, 0, 0, 0);
     
     const diffTime = ramadanStart - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    return diffDays > 0 ? diffDays : 0;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
-// --------------------------------------------
-// 🕋 ПОЛУЧЕНИЕ ФАЗЫ РАМАДАНА
-// --------------------------------------------
 function getRamadanPhase(day) {
     if (day === 0) return "🕋 Ожидание Рамадана";
     if (day <= 10) return "🌙 Первая декада — Милость";
     if (day <= 20) return "✨ Вторая декада — Прощение";
-    if (day <= 30) return "🔥 Третья декада — Спасение от Огня";
+    if (day <= 30) return "🔥 Третья декада — Спасение";
     return "🎉 Рамадан завершён";
 }
 
 // --------------------------------------------
-// 📊 ОПРЕДЕЛЯЕМ ТЕКУЩИЙ ДЕНЬ
+// 🎯 ТЕКУЩИЙ ДЕНЬ
 // --------------------------------------------
 const currentDayNumber = getCurrentRamadanDay();
 let currentDayIndex;
 
 if (currentDayNumber === 0) {
-    // До Рамадана — показываем 1-й день как предпросмотр
     currentDayIndex = 0;
 } else {
-    // Во время или после Рамадана
     currentDayIndex = Math.min(currentDayNumber - 1, 30);
 }
 
 // --------------------------------------------
-// 📋 ЗАПОЛНЕНИЕ ТАБЛИЦЫ
+// 📋 ТАБЛИЦА
 // --------------------------------------------
 function populateTable() {
     const tableBody = document.getElementById('ramadanTableBody');
@@ -166,14 +138,8 @@ function populateTable() {
     ramadanData.forEach((day, index) => {
         const row = document.createElement('tr');
         
-        // Подсвечиваем текущий день
         if (currentDayNumber !== 0 && index === currentDayIndex) {
             row.classList.add('current-day');
-        }
-        
-        // Подсвечиваем 27 ночь (Ляйлятуль-Кадр)
-        if (day.day === 27) {
-            row.classList.add('laylatul-qadr');
         }
         
         row.innerHTML = `
@@ -191,45 +157,38 @@ function populateTable() {
 }
 
 // --------------------------------------------
-// 🎯 ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ТЕКУЩЕМ ДНЕ
+:// 🎯 ОБНОВЛЕНИЕ ИНФОРМАЦИИ
 // --------------------------------------------
 function updateCurrentDayInfo() {
     const currentDay = ramadanData[currentDayIndex];
     const daysUntilRamadan = getDaysUntilRamadan();
     
-    // Обновляем время сухура и ифтара
     document.getElementById('suhoorTime').textContent = currentDay.fajr;
     document.getElementById('iftarTime').textContent = currentDay.maghrib;
     
-    // Обновляем обратный отсчёт
     const countdownEl = document.getElementById('countdownText');
     if (daysUntilRamadan > 0) {
         countdownEl.innerHTML = `<i class="fas fa-hourglass-half"></i> До Рамадана: ${daysUntilRamadan} ${getDaysWord(daysUntilRamadan)}`;
     } else if (daysUntilRamadan === 0) {
         countdownEl.innerHTML = `<i class="fas fa-moon"></i> Рамадан начался! 🌙`;
     } else {
-        const daysPassed = Math.abs(daysUntilRamadan);
-        countdownEl.innerHTML = `<i class="fas fa-star"></i> Рамадан: ${daysPassed} ${getDaysWord(daysPassed)}`;
+        countdownEl.innerHTML = `<i class="fas fa-star"></i> Рамадан идёт`;
     }
     
-    // Обновляем информацию о дате
     if (currentDayNumber === 0) {
-        // До Рамадана
         document.getElementById('hijriDate').textContent = `Ожидание Рамадана`;
         document.getElementById('gregorianDate').textContent = new Date().toLocaleDateString('ru-RU', {
-            day: 'numeric', month: 'long', year: 'numeric', weekday: 'short'
+            day: 'numeric', month: 'long', year: 'numeric'
         });
         document.getElementById('currentDay').textContent = '✨';
         document.getElementById('dayName').textContent = `${daysUntilRamadan} дней до Рамадана`;
     } else {
-        // Во время или после Рамадана
         document.getElementById('hijriDate').textContent = `${currentDay.day} Рамадана 1447`;
         document.getElementById('gregorianDate').textContent = currentDay.date;
         document.getElementById('currentDay').textContent = currentDay.day;
         document.getElementById('dayName').textContent = `${currentDay.day}-й день Рамадана`;
     }
     
-    // Обновляем прогресс
     const progressFill = document.getElementById('progressFill');
     const daysPassedEl = document.getElementById('daysPassed');
     const daysRemainingEl = document.getElementById('daysRemaining');
@@ -250,81 +209,57 @@ function updateCurrentDayInfo() {
     daysPassedEl.textContent = daysDisplay;
     daysRemainingEl.textContent = `(осталось ${remainingDisplay})`;
     
-    // Обновляем фазу Рамадана
     const phaseEl = document.getElementById('ramadanPhase');
-    if (phaseEl) {
-        phaseEl.textContent = getRamadanPhase(currentDayNumber);
-    }
-    
-    // Обновляем напоминания
-    updateReminders();
+    if (phaseEl) phaseEl.textContent = getRamadanPhase(currentDayNumber);
 }
 
 // --------------------------------------------
-:// 🔔 ОБНОВЛЕНИЕ НАПОМИНАНИЙ
+:// 🔔 НАПОМИНАНИЯ
 // --------------------------------------------
 function updateReminders() {
     const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
-    
-    // Парсим время сухура и ифтара
     const suhoorTime = document.getElementById('suhoorTime').textContent;
     const iftarTime = document.getElementById('iftarTime').textContent;
     
     const [suhoorHour, suhoorMin] = suhoorTime.split(':').map(Number);
     const [iftarHour, iftarMin] = iftarTime.split(':').map(Number);
     
-    // Напоминание о сухуре
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const suhoorMinutes = suhoorHour * 60 + suhoorMin;
+    const iftarMinutes = iftarHour * 60 + iftarMin;
+    
     const suhoorReminder = document.getElementById('suhoorReminder');
+    const iftarReminder = document.getElementById('iftarReminder');
+    
     if (suhoorReminder) {
-        const timeDiff = (suhoorHour * 60 + suhoorMin) - (currentHour * 60 + currentMinute);
-        if (timeDiff > 0 && timeDiff < 60) {
-            suhoorReminder.textContent = `⏰ Через ${timeDiff} мин`;
-            suhoorReminder.style.background = '#ffd700';
-        } else {
-            suhoorReminder.textContent = '🌙';
-        }
+        const diff = suhoorMinutes - currentMinutes;
+        if (diff > 0 && diff < 60) suhoorReminder.textContent = `⏰ ${diff}мин`;
+        else suhoorReminder.textContent = '🌙';
     }
     
-    // Напоминание об ифтаре
-    const iftarReminder = document.getElementById('iftarReminder');
     if (iftarReminder) {
-        const timeDiff = (iftarHour * 60 + iftarMin) - (currentHour * 60 + currentMinute);
-        if (timeDiff > 0 && timeDiff < 60) {
-            iftarReminder.textContent = `⏰ Через ${timeDiff} мин`;
-            iftarReminder.style.background = '#ffd700';
-        } else if (timeDiff < 0 && timeDiff > -60) {
-            iftarReminder.textContent = `🍽️ Ифтар начался`;
-            iftarReminder.style.background = '#4caf50';
-        } else {
-            iftarReminder.textContent = '⭐';
-        }
+        const diff = iftarMinutes - currentMinutes;
+        if (diff > 0 && diff < 60) iftarReminder.textContent = `⏰ ${diff}мин`;
+        else if (diff < 0 && diff > -60) iftarReminder.textContent = `🍽️ Сейчас`;
+        else iftarReminder.textContent = '⭐';
     }
 }
 
 // --------------------------------------------
-// 🤲 ОБНОВЛЕНИЕ ДУА ДНЯ
+:// 🤲 ДУА ДНЯ
 // --------------------------------------------
 function updateDuaOfTheDay() {
     let duaIndex;
-    
-    if (currentDayNumber === 0) {
-        // До Рамадана — случайное дуа
-        duaIndex = Math.floor(Math.random() * duas.length);
-    } else {
-        // Во время Рамадана — дуа по дню
-        duaIndex = (currentDayNumber - 1) % duas.length;
-    }
+    if (currentDayNumber === 0) duaIndex = Math.floor(Math.random() * duas.length);
+    else duaIndex = (currentDayNumber - 1) % duas.length;
     
     const dua = duas[duaIndex];
-    
     document.getElementById('duaArabic').textContent = dua.arabic;
     document.getElementById('duaTranslation').textContent = dua.translation;
 }
 
 // --------------------------------------------
-:// 💭 ОБНОВЛЕНИЕ ЦИТАТЫ ДНЯ
+:// 💭 ЦИТАТА ДНЯ
 // --------------------------------------------
 function updateQuoteOfTheDay() {
     const quoteIndex = Math.floor(Math.random() * quotes.length);
@@ -338,41 +273,16 @@ function updateQuoteOfTheDay() {
 }
 
 // --------------------------------------------
-// 🔍 ПОИСК ПО ТАБЛИЦЕ
-// --------------------------------------------
-function setupSearch() {
-    const searchInput = document.getElementById('tableSearch');
-    if (!searchInput) return;
-    
-    searchInput.addEventListener('keyup', function() {
-        const searchTerm = this.value.toLowerCase();
-        const tableRows = document.querySelectorAll('#ramadanTableBody tr');
-        
-        tableRows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
-}
-
-// --------------------------------------------
-// ⏰ ЖИВЫЕ ЧАСЫ
+:// ⏰ ЖИВЫЕ ЧАСЫ
 // --------------------------------------------
 function updateLiveClock() {
     const clockEl = document.getElementById('liveClock');
     if (!clockEl) return;
     
     const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    
-    clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+    clockEl.textContent = now.toLocaleTimeString('ru-RU');
 }
 
-// --------------------------------------------
-// 📝 ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// --------------------------------------------
 function getDaysWord(days) {
     if (days % 10 === 1 && days % 100 !== 11) return 'день';
     if ([2,3,4].includes(days % 10) && ![12,13,14].includes(days % 100)) return 'дня';
@@ -380,30 +290,16 @@ function getDaysWord(days) {
 }
 
 // --------------------------------------------
-// 🚀 ИНИЦИАЛИЗАЦИЯ
+:// 🚀 ЗАПУСК
 // --------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🌙 Сайт Рамадан 2026 загружен');
-    
     populateTable();
     updateCurrentDayInfo();
     updateDuaOfTheDay();
     updateQuoteOfTheDay();
-    setupSearch();
     updateLiveClock();
+    updateReminders();
     
-    // Обновляем часы каждую секунду
     setInterval(updateLiveClock, 1000);
-    
-    // Обновляем напоминания каждую минуту
     setInterval(updateReminders, 60000);
-    
-    // Добавляем эффект появления
-    document.body.classList.add('fade-in');
 });
-
-// Обработка ошибок
-window.onerror = function(msg, url, line) {
-    console.log('Ошибка:', msg, 'на строке', line);
-    return false;
-};
